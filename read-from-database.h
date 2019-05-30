@@ -1,15 +1,13 @@
 #include <mysql/mysql.h>
 #include "common.h"
-//////////////////////////////////////////
 typedef struct Response {
     char message[500];
-    char status[500];
+    char status[5];
 } Response;
 
 
 
 Response* readFile(char* fileName, Response* response, FileInfo* headOfFileInfo);
-/////////////////////////////////////////////
 
 typedef struct User{
     char* name;

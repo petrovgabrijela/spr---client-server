@@ -17,9 +17,12 @@ void processData(int sockfd, User* headOfUsers, Combinations *headOfCombinations
 
         read(sockfd, buff, sizeof(buff));
 
-        memcpy(userFile, buff, sizeof(buff));
+        if (strncmp("exit", buff, 4) == 0) {
+            printf("Server Exit...\n");
+            break;
+        }
 
-        printf("From client: %s %s\n", userFile->username, userFile->fileName);
+        memcpy(userFile, buff, sizeof(buff));
 
         bzero(buff, MAX);
 
@@ -29,7 +32,6 @@ void processData(int sockfd, User* headOfUsers, Combinations *headOfCombinations
         {
           if(logUser(userFile->username, headOfUsers)==1)
           {
-              printf("Username: %s\n", userFile->username);
               response = findFile(userFile, headOfCombinations, headOfBadUsers, response, headOfFileInfo);
               log = 1;
           }
@@ -48,11 +50,6 @@ void processData(int sockfd, User* headOfUsers, Combinations *headOfCombinations
 
         write(sockfd, buff, sizeof(buff));
 
-
-        if (strncmp("exit", buff, 4) == 0) {
-            printf("Server Exit...\n");
-            break;
-        }
     }
 }
 Combinations* loadUserFileCombinations()

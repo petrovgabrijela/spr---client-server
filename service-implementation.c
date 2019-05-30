@@ -52,22 +52,6 @@ if(write(fd, username, usernameLen) <= 0) {
 }
 
 
-// BadUsers* badUser = (BadUsers*) malloc(sizeof(BadUsers));
-//
-// strcpy(badUser->username, username);
-//
-// badUser->numberOfBadRequests = numberOfBadRequests;
-//
-// BadUsers* temp = head;
-//
-// while(temp->next!=NULL)
-// {
-//   temp = temp->next;
-// }
-//
-// temp->next = badUser;
-// badUser->next = NULL;
-
 close(fd);
 
 }
@@ -84,23 +68,6 @@ void writeToUserFileCombinationFile(UserFile* userData, Combinations* head)
   write(fd, &fileNameLen, sizeof(int));
   write(fd, userData->fileName, fileNameLen);
 
-  // UserFile *userFile = (UserFile*) malloc(sizeof(UserFile));
-  //
-  // Combinations* combinations = (Combinations*) malloc(sizeof(Combinations));
-  //
-  // strcpy(userFile->username, userData->username);
-  // strcpy(userFile->fileName, userData->fileName);
-  //
-  // combinations->userFile = userFile;
-  //
-  // Combinations* temp = head;
-  //
-  // while(temp->next!=NULL)
-  // {
-  //   temp = temp->next;
-  // }
-  // temp->next = combinations;
-  // combinations->next = NULL;
 
   close(fd);
 

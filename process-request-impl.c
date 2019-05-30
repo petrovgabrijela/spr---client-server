@@ -61,12 +61,11 @@ void processRequest(int sockfd)
           write(1, "Enter your username: ", 22);
           read(0, username, 20);
           username[strlen(username)-1] = '\0';
-          printf("Username:    %s ", username);
           response = sendReceiveData(username, fileName, userFile, response, sockfd, buff);
           if(strcmp(response->status, "OK")==0)
           {
             log = 1;
-            saveFile(response);
+            saveFile(response, username);
           }
         }
         else {
@@ -77,51 +76,42 @@ void processRequest(int sockfd)
           strtok_r (address, "/", &fileName);
 
           response = sendReceiveData(username, fileName, userFile, response, sockfd, buff);
+          if(response == NULL)
+          {
+            break;
+          }
           if(strcmp(response->status, "OK")==0)
           {
-            saveFile(response);
+            saveFile(response, username);
           }
 
-          /*// assign IP, PORT
-          servaddr.sin_family = AF_INET;
-          servaddr.sin_addr.s_addr = inet_addr(address);
-          servaddr.sin_port = htons(PORT);*/
-
-          // connect the client socket to server socket
-          /*connfd = connect(sockfd, (SA*)&servaddr, sizeof(servaddr));
-          if (connfd != 0) {
-              printf("connection with the server failed...\n");
-              exit(0);
-          }
-          else
-              printf("connected to the server..\n");*/
         }
 
-        if ((strncmp(buff, "exit", 4)) == 0) {
-            printf("Client Exit...\n");
-            break;
-        }
     }
 }
 
 Response* sendReceiveData(char* username, char* fileName, UserFile* userFile, Response* response, int sockfd, char* buff)
 {
-  bzero(buff, MAX);
+    bzero(buff, MAX);
+  if(strcmp(fileName, "exit") == 0)
+  {
+    memcpy(buff, "exit", MAX);
+    write(sockfd, buff, MAX);
+    bzero(buff, MAX);
+    return NULL;
+  }
+  else
+  {
   strcpy(userFile->fileName, fileName);
   strcpy(userFile->username, username);
 
   memcpy(buff, userFile, MAX);
+  }
 
   write(sockfd, buff, MAX);
   bzero(buff, MAX);
   read(sockfd, buff, MAX);
 
   memcpy(response, buff, MAX);
-  if(strcmp(response->status, "OK")==0)
-  {
-    printf("From Server 2: %s %s\n", response->message, response->title);
-  }
-  else
-  printf("From Server 3: %s %s\n", response->message, response->status);
   return response;
 }

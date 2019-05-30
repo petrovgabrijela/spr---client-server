@@ -145,11 +145,8 @@ int logUser(char* username, User* head)
   User* temp = head;
   while(temp!=NULL)
     {
-      printf("TEMP USER: %s\n", temp->username);
-      printf("Username db: %s", username);
     if(strcmp(temp->username, username) == 0)
     {
-      printf("User found! %s", username);
       return 1;
     }
     temp=temp->next;
